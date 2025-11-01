@@ -12,7 +12,8 @@ module.exports = {
   ],
   setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
   moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '@kubernetes/client-node': '<rootDir>/tests/__mocks__/@kubernetes/client-node.js'
   },
   silent: true
 };

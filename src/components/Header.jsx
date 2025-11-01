@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AppBar, Title, Toolbar } from './styled/AppBar';
 import { Select, Label } from './styled/Select';
+import { SwitchContainer, SwitchLabel, SwitchToggle, SwitchOption } from './styled/Switch';
 import ClusterModal from './ClusterModal';
 import styled from 'styled-components';
 
@@ -19,7 +20,17 @@ const ClusterButton = styled.button`
   }
 `;
 
-export default function Header({ contexts, selectedContext, onContextChange }) {
+export default function Header({ 
+  contexts, 
+  selectedContext, 
+  onContextChange,
+  clusters,
+  selectedCluster,
+  onClusterChange,
+  clusterContexts,
+  isClusterMode,
+  onModeChange
+}) {
   const [showClusterModal, setShowClusterModal] = useState(false);
 
   return (
@@ -27,16 +38,43 @@ export default function Header({ contexts, selectedContext, onContextChange }) {
       <AppBar>
         <Title>🚢 Kubis</Title>
         <Toolbar>
-          <Label>Contexto:</Label>
-          <Select 
-            value={selectedContext} 
-            onChange={(e) => onContextChange(e.target.value)}
-          >
-            <option value="">Selecione um contexto</option>
-            {contexts.map(ctx => (
-              <option key={ctx} value={ctx}>{ctx}</option>
-            ))}
-          </Select>
+          <SwitchContainer>
+            <SwitchOption active={!isClusterMode}>Contexto</SwitchOption>
+            <SwitchToggle 
+              checked={isClusterMode} 
+              onClick={() => onModeChange(!isClusterMode)}
+            />
+            <SwitchOption active={isClusterMode}>Cluster</SwitchOption>
+          </SwitchContainer>
+          
+          {isClusterMode ? (
+            <>
+              <Label>Cluster:</Label>
+              <Select 
+                value={selectedCluster} 
+                onChange={(e) => onClusterChange(e.target.value)}
+              >
+                <option value="">Selecione um cluster</option>
+                {clusters.map(cluster => (
+                  <option key={cluster.id} value={cluster.name}>{cluster.name}</option>
+                ))}
+              </Select>
+            </>
+          ) : (
+            <>
+              <Label>Contexto:</Label>
+              <Select 
+                value={selectedContext} 
+                onChange={(e) => onContextChange(e.target.value)}
+              >
+                <option value="">Selecione um contexto</option>
+                {contexts.map(ctx => (
+                  <option key={ctx} value={ctx}>{ctx}</option>
+                ))}
+              </Select>
+            </>
+          )}
+          
           <ClusterButton onClick={() => setShowClusterModal(true)}>
             🏗️ Clusters
           </ClusterButton>

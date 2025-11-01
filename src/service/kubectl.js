@@ -1,12 +1,12 @@
-import { exec } from 'node:child_process';
-import { promisify } from 'node:util';
+import * as k8s from '@kubernetes/client-node';
 
-const execAsync = promisify(exec);
+const kc = new k8s.KubeConfig();
+kc.loadFromDefault();
 
 export const getContexts = async () => {
   try {
-    const { stdout } = await execAsync('kubectl config get-contexts -o name');
-    return stdout.trim().split('\n').filter(ctx => ctx);
+    const contexts = kc.getContexts();
+    return contexts.map(ctx => ctx.name);
   } catch (error) {
     return [];
   }
@@ -14,16 +14,20 @@ export const getContexts = async () => {
 
 export const getClusterInfo = async (context) => {
   try {
-    const contextFlag = context ? `--context=${context}` : '';
-    const [clusterInfo, nodes, namespaces] = await Promise.all([
-      execAsync(`kubectl cluster-info ${contextFlag}`),
-      execAsync(`kubectl get nodes ${contextFlag} -o wide`),
-      execAsync(`kubectl get namespaces ${contextFlag}`)
+    if (context) {
+      kc.setCurrentContext(context);
+    }
+    
+    const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
+    const [nodes, namespaces] = await Promise.all([
+      k8sApi.listNode(),
+      k8sApi.listNamespace()
     ]);
+    
     return {
-      clusterInfo: clusterInfo.stdout,
-      nodes: nodes.stdout,
-      namespaces: namespaces.stdout
+      clusterInfo: `Cluster: ${kc.getCurrentCluster()?.name || 'Unknown'}`,
+      nodes: nodes.body.items.map(node => node.metadata.name).join('\n'),
+      namespaces: namespaces.body.items.map(ns => ns.metadata.name).join('\n')
     };
   } catch (error) {
     return { error: error.message };
@@ -32,7 +36,7 @@ export const getClusterInfo = async (context) => {
 
 export const setContext = async (context) => {
   try {
-    await execAsync(`kubectl config use-context ${context}`);
+    kc.setCurrentContext(context);
     return { success: true };
   } catch (error) {
     return { error: error.message };

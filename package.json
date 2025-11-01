@@ -46,9 +46,11 @@
   },
   "dependencies": {
     "@kubernetes/client-node": "^1.4.0",
+    "bufferutil": "^4.0.9",
     "electron-squirrel-startup": "^1.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "utf-8-validate": "^6.0.5"
   }
 }
