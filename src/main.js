@@ -1,7 +1,9 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-import { setupKubectlHandlers } from './ipc-handlers.js';
+import { setupKubectlHandlers } from './service/ipc-handlers.js';
+import { setupClusterHandlers } from './service/cluster-handlers.js';
+import appData from './core/app-data.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -32,8 +34,10 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  await appData.init();
   setupKubectlHandlers();
+  setupClusterHandlers();
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
