@@ -11,6 +11,7 @@ O Kubis é uma aplicação desktop que visa simplificar o gerenciamento de clust
 ### Stack Tecnológica
 - **Electron**: Framework para aplicações desktop multiplataforma
 - **React 19**: Biblioteca para construção da interface do usuário
+- **Styled Components**: Biblioteca CSS-in-JS para estilização de componentes
 - **Vite**: Build tool e bundler para desenvolvimento rápido
 - **Electron Forge**: Toolchain para empacotamento e distribuição
 
