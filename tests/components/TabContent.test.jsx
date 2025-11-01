@@ -10,17 +10,14 @@ describe('TabContent Component', () => {
     expect(screen.getByText('Selecione um contexto do Kubernetes para visualizar os recursos')).toBeInTheDocument();
   });
 
-  test('should show development message with context', () => {
+  test('should render PodsList component for pods tab', () => {
     render(<TabContent activeTab="pods" selectedContext="test-context" />);
 
-    expect(screen.getByText('🟢 Pods')).toBeInTheDocument();
-    expect(screen.getByText('Implementação em desenvolvimento...')).toBeInTheDocument();
-    expect(screen.getByText('test-context')).toBeInTheDocument();
+    expect(screen.getByText('Pods')).toBeInTheDocument();
   });
 
-  test('should show correct tab label for each tab', () => {
+  test('should show correct tab label for non-pods tabs', () => {
     const tabs = [
-      { id: 'pods', label: '🟢 Pods' },
       { id: 'services', label: '🔗 Services' },
       { id: 'deployments', label: '🚀 Deployments' },
       { id: 'configmaps', label: '⚙️ ConfigMaps' },
@@ -38,10 +35,11 @@ describe('TabContent Component', () => {
     });
   });
 
-  test('should show context name in active context display', () => {
-    render(<TabContent activeTab="pods" selectedContext="my-cluster-context" />);
+  test('should show development message for non-pods tabs', () => {
+    render(<TabContent activeTab="services" selectedContext="my-cluster-context" />);
 
     expect(screen.getByText('my-cluster-context')).toBeInTheDocument();
+    expect(screen.getByText('Implementação em desenvolvimento...')).toBeInTheDocument();
   });
 
   test('should handle null selectedContext', () => {

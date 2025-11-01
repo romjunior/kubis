@@ -5,7 +5,8 @@ contextBridge.exposeInMainWorld('kubectlAPI', {
   getClusterInfo: (context) => ipcRenderer.invoke('kubectl:get-cluster-info', context),
   setContext: (context) => ipcRenderer.invoke('kubectl:set-context', context),
   getClusters: () => ipcRenderer.invoke('kubectl:get-clusters'),
-  getContextsForCluster: (clusterName) => ipcRenderer.invoke('kubectl:get-contexts-for-cluster', clusterName)
+  getContextsForCluster: (clusterName) => ipcRenderer.invoke('kubectl:get-contexts-for-cluster', clusterName),
+  getPods: (isClusterMode, contexts, namespace) => ipcRenderer.invoke('kubectl:get-pods', isClusterMode, contexts, namespace)
 });
 
 contextBridge.exposeInMainWorld('clustersAPI', {

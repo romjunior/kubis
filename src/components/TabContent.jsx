@@ -1,5 +1,6 @@
 import { Content } from './styled/Container';
 import { Paper, EmptyState } from './styled/Paper';
+import PodsList from './PodsList.jsx';
 
 const tabs = [
   { id: 'pods', label: '🟢 Pods' },
@@ -24,6 +25,15 @@ export default function TabContent({ activeTab, selectedContext, isClusterMode, 
             <p>{isClusterMode ? 'Selecione um cluster para visualizar os recursos' : 'Selecione um contexto do Kubernetes para visualizar os recursos'}</p>
           </EmptyState>
         </Paper>
+      </Content>
+    );
+  }
+
+  // Renderizar componente específico para pods
+  if (activeTab === 'pods') {
+    return (
+      <Content>
+        <PodsList />
       </Content>
     );
   }
