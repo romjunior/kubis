@@ -37,6 +37,7 @@ src/
 - Props tipadas quando possível
 - Styled Components para estilização
 - Evitar inline styles e CSS tradicional
+- Separar os componentes em arquivos diferentes e também criar componentes reutilizáveis
 
 ### Styled Components
 - CSS-in-JS para componentes isolados
@@ -66,6 +67,12 @@ src/
 - Lazy loading para componentes grandes
 - Memoização quando necessário
 - Evitar re-renders desnecessários
+
+### Estrutura
+- separação das funcionalidades em arquivos
+- o que for essencial, estrutura da app e altamente reutilizável ficará no core o restante é no service
+- no utils ficará somente funcões utilitárias
+- obrigatório testes unitários do jest
 
 ## Kubernetes Integration
 

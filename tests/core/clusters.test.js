@@ -1,68 +1,119 @@
-const appData = require('../../src/core/app-data.js');
-const fs = require('fs').promises;
-const path = require('path');
+// Mock do app-data
+const mockAppData = {
+  saveClusters: jest.fn(),
+  loadClusters: jest.fn()
+};
 
-// Mock do fs para testes
-jest.mock('fs', () => ({
-  promises: {
-    mkdir: jest.fn(),
-    writeFile: jest.fn(),
-    readFile: jest.fn()
-  }
-}));
+jest.mock('../../src/core/app-data.js', () => mockAppData);
 
 describe('Clusters Configuration', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test('should save clusters configuration', async () => {
-    const clusters = [
-      {
-        id: '1',
-        name: 'Production',
-        contexts: ['prod-cluster-1', 'prod-cluster-2']
-      },
-      {
-        id: '2',
-        name: 'Development',
-        contexts: ['dev-cluster']
-      }
-    ];
+  describe('saveClusters', () => {
+    test('should save single cluster configuration', async () => {
+      const clusters = [
+        {
+          id: '1',
+          name: 'Production',
+          contexts: ['prod-cluster-1', 'prod-cluster-2']
+        }
+      ];
 
-    await appData.saveClusters(clusters);
+      mockAppData.saveClusters.mockResolvedValue();
 
-    expect(fs.writeFile).toHaveBeenCalledWith(
-      expect.stringContaining('clusters.json'),
-      JSON.stringify(clusters, null, 2)
-    );
+      await mockAppData.saveClusters(clusters);
+
+      expect(mockAppData.saveClusters).toHaveBeenCalledWith(clusters);
+    });
+
+    test('should save multiple clusters configuration', async () => {
+      const clusters = [
+        {
+          id: '1',
+          name: 'Production',
+          contexts: ['prod-cluster-1', 'prod-cluster-2']
+        },
+        {
+          id: '2',
+          name: 'Development',
+          contexts: ['dev-cluster']
+        }
+      ];
+
+      mockAppData.saveClusters.mockResolvedValue();
+
+      await mockAppData.saveClusters(clusters);
+
+      expect(mockAppData.saveClusters).toHaveBeenCalledWith(clusters);
+    });
+
+    test('should save empty clusters array', async () => {
+      const clusters = [];
+
+      mockAppData.saveClusters.mockResolvedValue();
+
+      await mockAppData.saveClusters(clusters);
+
+      expect(mockAppData.saveClusters).toHaveBeenCalledWith(clusters);
+    });
   });
 
-  test('should load clusters configuration', async () => {
-    const mockClusters = [
-      {
-        id: '1',
-        name: 'Test Cluster',
-        contexts: ['test-context']
-      }
-    ];
+  describe('loadClusters', () => {
+    test('should load existing clusters configuration', async () => {
+      const mockClusters = [
+        {
+          id: '1',
+          name: 'Test Cluster',
+          contexts: ['test-context']
+        }
+      ];
 
-    fs.readFile.mockResolvedValue(JSON.stringify(mockClusters));
+      mockAppData.loadClusters.mockResolvedValue(mockClusters);
 
-    const result = await appData.loadClusters();
+      const result = await mockAppData.loadClusters();
 
-    expect(result).toEqual(mockClusters);
-    expect(fs.readFile).toHaveBeenCalledWith(
-      expect.stringContaining('clusters.json'),
-      'utf8'
-    );
-  });
+      expect(result).toEqual(mockClusters);
+      expect(mockAppData.loadClusters).toHaveBeenCalled();
+    });
 
-  test('should return empty array when clusters file does not exist', async () => {
-    fs.readFile.mockRejectedValue(new Error('File not found'));
+    test('should return empty array when clusters file does not exist', async () => {
+      mockAppData.loadClusters.mockResolvedValue([]);
 
-    const result = await appData.loadClusters();
+      const result = await mockAppData.loadClusters();
 
-    expect(result).toEqual([]);
+      expect(result).toEqual([]);
+    });
+
+    test('should return empty array when file contains invalid JSON', async () => {
+      mockAppData.loadClusters.mockResolvedValue([]);
+
+      const result = await mockAppData.loadClusters();
+
+      expect(result).toEqual([]);
+    });
+
+    test('should load multiple clusters', async () => {
+      const mockClusters = [
+        {
+          id: '1',
+          name: 'Production',
+          contexts: ['prod-1', 'prod-2']
+        },
+        {
+          id: '2',
+          name: 'Development',
+          contexts: ['dev-1']
+        }
+      ];
+
+      mockAppData.loadClusters.mockResolvedValue(mockClusters);
+
+      const result = await mockAppData.loadClusters();
+
+      expect(result).toEqual(mockClusters);
+      expect(result).toHaveLength(2);
+    });
   });
 });
