@@ -118,19 +118,4 @@ AGPL v3 License - veja o arquivo LICENSE para detalhes.
 ## 👨‍💻 Autor
 
 **Romualdo Junior**
-- Email: romualdo.jrr@gmail.com
 
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Por favor:
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Abra um Pull Request
-
-## 🗺️ Roadmap
-
-- **v1.0**: Interface básica e conexão com clusters
-- **v1.1**: Gerenciamento completo de recursos
-- **v1.2**: Monitoramento e métricas
-- **v2.0**: Funcionalidades avançadas e plugins
