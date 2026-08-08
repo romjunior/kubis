@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend React"
+  short_description: "Organize interfaces React reutilizáveis e acessíveis"
+  default_prompt: "Use $react-frontend para implementar uma interface React reutilizável e acessível no Kubis."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Qualidade JavaScript"
+  short_description: "Teste, cobertura, lint e formato consistentes"
+  default_prompt: "Use $javascript-quality para criar ou revisar testes e qualidade de código JavaScript."

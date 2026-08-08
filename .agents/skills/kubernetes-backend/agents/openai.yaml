@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend Kubernetes"
+  short_description: "Padronize backends Kubernetes em JavaScript"
+  default_prompt: "Use $kubernetes-backend para implementar uma funcionalidade backend segura para Kubernetes."
